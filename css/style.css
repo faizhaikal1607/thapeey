@@ -40,7 +40,7 @@ html {
 }
 
 .navbar .navbar-logo {
-  font-size: 2rem;
+  font-size: 2.6rem;
   font-weight: 700;
   color: #fff;
 }
@@ -48,7 +48,7 @@ html {
 .navbar .navbar-nav a {
   color: #fff;
   display: inline-block;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   margin: 0 0.5rem;
 }
 
@@ -138,7 +138,7 @@ html {
   margin-top: 1rem;
   display: inline-block;
   padding: 1rem 3rem;
-  font-size: 1.4rem;
+  font-size: 1.7rem;
   color: #fff;
   background-color: var(--primary);
   border-radius: 0.5rem;
@@ -179,7 +179,7 @@ html {
 .about .row .content p {
   color: #ff4400;
   margin-bottom: 0.8rem;
-  font-size: 0.7Srem;
+  font-size: 1.4rem;
   font-weight: 400;
   line-height: 1.6;
   text-align: justify;
@@ -226,11 +226,11 @@ html {
 
 .menu .row .menu-card .menu-card-title {
   margin: 1rem auto 0.5rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .menu .row .menu-card .menu-card-price {
-  font-size: 1.2rem;
+  font-size: 1.7rem;
   margin-bottom: 1rem;
 }
 
@@ -246,6 +246,7 @@ html {
   margin: auto;
   font-weight: 300;
   line-height: 1.6;
+  font-size: 1.4rem;
 }
 
 .contact .row {
