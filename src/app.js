@@ -26,7 +26,7 @@ document.addEventListener("alpine:init", () => {
         price: 10000,
       },
       {
-        id: 3,
+        id: 5,
         name: "Smoothie Tape Singkong",
         img: "smoothie-tape1.jpg",
         price: 20000,

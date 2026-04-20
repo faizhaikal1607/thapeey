@@ -143,6 +143,7 @@ html {
   background-color: #fff;
   color: #ff4400;
   transition: 0.3s;
+  min-height: 2000px;
 }
 
 .shopping-cart h4 {
