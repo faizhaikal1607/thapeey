@@ -18,10 +18,19 @@
 
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Alpine.js -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <!-- App -->
+    <script src="src/app.js"></script>
   </head>
   <body>
     <!--  Navbar Start -->
-    <nav class="navbar">
+    <nav class="navbar" x-data>
       <a href="#" class="navbar-logo">Thapeeツ</a>
 
       <div class="navbar-nav">
@@ -32,11 +41,92 @@
       </div>
 
       <div class="navbar-extra">
-        <a href="#" id="search"><i data-feather="search"></i></a>
-        <a href="#" id="shopping"><i data-feather="shopping-cart"></i></a>
+        <a href="#" id="search-button"><i data-feather="search"></i></a>
+        <a href="#" id="shopping-cart-button"
+          ><i data-feather="shopping-cart"></i>
+          <span
+            class="quantity-badge"
+            x-show="$store.cart.quantity"
+            x-text="$store.cart.quantity"
+          ></span>
+        </a>
         <a href="#" id="hamburger-menu"><i data-feather="menu"></i></a>
       </div>
+
+      <!-- Search Form start -->
+      <div class="search-form">
+        <input type="search" id="search-box" placeholder="search here..." />
+        <label for="search-box"><i data-feather="search"></i></label>
+      </div>
+      <!-- Search Form end -->
+
+      <!-- Shopping Cart start -->
+      <div class="shopping-cart">
+        <h4 x-show="$store.cart.items.length">Detail Pesanan</h4>
+        <template x-for="(item, index) in $store.cart.items" x-keys="index">
+          <div class="cart-item">
+            <img :src="`image/${item.img}`" :alt="item.name" />
+            <div class="item-detail">
+              <h3 x-text="item.name"></h3>
+              <div class="item-price">
+                <span x-text="rupiah(item.price)"></span> &times;
+                <button id="remove" @click="$store.cart.remove(item.id)">
+                  &minus;
+                </button>
+                <span x-text="item.quantity"></span>
+                <button id="add" @click="$store.cart.add(item)">&plus;</button>
+                &equals;
+                <span x-text="rupiah(item.total)"></span>
+              </div>
+            </div>
+          </div>
+        </template>
+        <h5 x-show="!$store.cart.items.length" style="margin-top: 1rem">
+          Cart Is Empty
+        </h5>
+        <h5 x-show="$store.cart.items.length">
+          Total : <span x-text="rupiah($store.cart.total)"></span>
+        </h5>
+
+        <div class="form-container" x-show="$store.cart.items.length">
+          <form
+            action=""
+            id="checkoutForm"
+            onsubmit="return handleCheckout(event);"
+          >
+            <h5 style="margin-top: 1.4rem">Customer Detail</h5>
+            <label for="name">
+              <span>Name</span>
+              <input type="text" name="name" id="name" />
+            </label>
+            <label for="email">
+              <span>Email</span>
+              <input type="email" name="email" id="email" />
+            </label>
+            <label for="phone">
+              <span>No HP</span>
+              <input type="text" name="phone" id="phone" />
+            </label>
+
+            <button
+              class="checkout-button"
+              type="submit"
+              id="checkout-button"
+              value="checkout"
+            >
+              Checkout
+            </button>
+          </form>
+          <div id="popup" class="popup">
+            <div class="popup-content">
+              <h3>Checkout Berhasil ✅</h3>
+              <button class="btn-popup" onclick="checkoutSuccess()">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
+    <!-- Navbar End -->
 
     <!-- Hero section -->
     <section class="hero" id="home">
@@ -79,7 +169,7 @@
     </section>
 
     <!-- Menu Section -->
-    <section id="menu" class="menu">
+    <section id="menu" class="menu" x-data="products">
       <h2>Menu</h2>
       <p>
         Menu olahan dari tape singkong menjadi berbagai hidangan kreatif seperti
@@ -87,33 +177,91 @@
       </p>
 
       <div class="row">
-        <div class="menu-card">
-          <img
-            src="image/bola-tape1.jpg"
-            alt="bola tape"
-            class="menu-card-img"
-          />
-          <h3 class="menu-card-title">Bola Tape Singkong</h3>
-          <p class="menu-card-price">Rp. 15.000,-</p>
-        </div>
-        <div class="menu-card">
-          <img
-            src="image/bolu-tape1.jpg"
-            alt="bolu tape"
-            class="menu-card-img"
-          />
-          <h3 class="menu-card-title">Bolu Tape Singkong</h3>
-          <p class="menu-card-price">Rp. 45.000,-</p>
-        </div>
-        <div class="menu-card">
-          <img
-            src="image/smoothie-tape1.jpg"
-            alt="smoothie tape tape"
-            class="menu-card-img"
-          />
-          <h3 class="menu-card-title">Smoothie Tape Singkong</h3>
-          <p class="menu-card-price">Rp. 10.000,-</p>
-        </div>
+        <!-- Produk 1 Start -->
+        <template x-for="(item, index) in items" x-key="index">
+          <div class="menu-card">
+            <div class="menu-image">
+              <img :src="`image/${item.img}`" :alt="item.name" />
+            </div>
+            <div class="menu-content">
+              <h3 x-text="item.name"></h3>
+              <div class="menu-stars">
+                <svg
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="image/feather-sprite.svg#star" />
+                </svg>
+                <svg
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="image/feather-sprite.svg#star" />
+                </svg>
+                <svg
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="image/feather-sprite.svg#star" />
+                </svg>
+                <svg
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="image/feather-sprite.svg#star" />
+                </svg>
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="image/feather-sprite.svg#star" />
+                </svg>
+              </div>
+              <div class="menu-icons">
+                <a href="#" @click.prevent="$store.cart.add(item)">
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <use href="image/feather-sprite.svg#shopping-cart" />
+                  </svg>
+                  <div class="menu-price" x-text="rupiah(item.price)"></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </template>
+        <!-- Produk 1 End -->
       </div>
     </section>
 
